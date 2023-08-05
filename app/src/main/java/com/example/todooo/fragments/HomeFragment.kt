@@ -24,6 +24,7 @@ import com.example.todooo.R
 import com.example.todooo.RvAdapter
 import com.example.todooo.databinding.FragmentHomeBinding
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -68,7 +69,7 @@ class HomeFragment : Fragment(), PopUpFragment.popupevent {
             if(popUpFragment!=null){
                 childFragmentManager.beginTransaction().remove(popUpFragment!!).commit()
             }
-            popUpFragment=PopUpFragment()
+            popUpFragment= PopUpFragment()
             popUpFragment!!.setlistener(this)
             popUpFragment!!.show(
                 childFragmentManager,
@@ -128,10 +129,7 @@ class HomeFragment : Fragment(), PopUpFragment.popupevent {
 
     override fun oncreatenew(note: String, des: String) {
         dataref.push().setValue(NoteFirebase(note, des)).addOnCompleteListener {
-            if(it.isSuccessful){
-                Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show()
-            }
-            else{
+            if(!it.isSuccessful){
                 Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
         }
@@ -162,6 +160,13 @@ class HomeFragment : Fragment(), PopUpFragment.popupevent {
                         if(it.isSuccessful){
                             Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
                             rvAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+                            Snackbar.make(binding.recycleview,"",Snackbar.LENGTH_LONG).setAction(
+                                "Undo Delete", object :View.OnClickListener{
+                                    override fun onClick(v: View?) {
+                                        oncreatenew(note.name!!, note.des!!)
+                                    }
+                                }
+                            ).show()
                             rvAdapter.notifyDataSetChanged()
                         }
                         else Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
