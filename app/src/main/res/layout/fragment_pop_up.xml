@@ -77,6 +77,7 @@
                         android:id="@+id/edtdes"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:cursorVisible="false"
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxHeight="150dp"
                         android:textSize="20dp" />

@@ -43,6 +43,7 @@ class PopUpFragment : BottomSheetDialogFragment() {
             binding.edtnote.setText(previNote!!.name)
             binding.edtdes.setText(previNote!!.des)
         }
+        binding.edtdes.requestFocus()
         setevents()
     }
 
